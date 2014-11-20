@@ -1,0 +1,107 @@
+
+public class ImaginaryNumber {
+
+	private double real = 0;
+	private double imaginary = 0;
+
+	private static int iterationCount = 255;
+	private static double c = 0.3742 - 4.5 * 0.03; //2732
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////    Methods               /////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * calculates the absolute value of an imaginary number
+	 * @param n what imaginary number to test
+	 * @return the absolute value of n
+	 */
+	public double calcAbsoluteVal(){
+		//absolutvärde på komplext tal = sqrt(a^2 + b^2) : a är rationell del  och b är imaginär del
+		return Math.sqrt( (this.getReal() * this.getReal()) + (this.getImaginary() * this.getImaginary()) );
+	}
+
+
+	/**
+	 * Calculates how many iterations it takes for an imaginary number to escape the julia set
+	 * @param this what imaginary number to test
+	 * @return the amount of iterations, returns 0 if result would be over iterationCount.
+	 */
+	public int calcJuliaEscapeTime(){
+		int counter = 0;
+		//julia = z(n+1) = Zn^2 + C
+
+		for (int i = 0; i<iterationCount; i++){
+			
+			this.pow2();
+			this.setReal(this.getReal() + c);
+			counter++;
+
+			if (this.calcAbsoluteVal() > 2){
+				return counter;
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * raise the imaginary number to the power of 2
+	 */
+	public void pow2(){
+		//(komplext tal)^2 + konstant
+		double tmpReal= this.getReal();
+		double tmpIm = this.getImaginary();
+		
+		this.setReal( (tmpReal*tmpReal) - (tmpIm*tmpIm));
+		this.setImaginary(2*(tmpReal*tmpIm));
+
+	}
+	
+	public ImaginaryNumber multiplyWith(ImaginaryNumber oth){
+		ImaginaryNumber ret = new ImaginaryNumber();
+		
+		//(x+yi)(u+vi) = (xu - yv) + (xv + yu)i
+		
+		return ret;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////// Constructons, getter & setters  ///////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * default constructor 
+	 */
+	public ImaginaryNumber(){
+		this.real = 0;
+		this.imaginary = 0;
+	}
+	/**
+	 * constructor
+	 * @param a real part of imaginary number
+	 * @param i imaginary part of imaginary number
+	 */
+	public ImaginaryNumber(double a, double i){
+		this.real = a;
+		this.imaginary = i;
+	}
+
+	public double getReal(){return this.real;}
+	public double getImaginary(){return this.imaginary;}
+	public double getC(){return this.c;}
+
+	public void setReal(Double d){this.real = d;}
+	public void setImaginary(Double d){this.imaginary = d;}
+	public void setC(Double d){this.c = d;}
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////  teori     //////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//regler för imaginära tal
+//(x+yi)(u+vi) = (xu - yv) + (xv + yu)i
+//(x+yi)(x+yi) = (xx - yy) + (xy + yx)i 	-komplext tal ^2
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
