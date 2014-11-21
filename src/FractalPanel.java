@@ -31,17 +31,29 @@ public class FractalPanel extends JPanel{
 					g.setColor(new Color( 0, 0, 0));
 				}
 				else{
-					g.setColor(new Color(255-escapeTime  , 255, 255));
-				}
+						pickColor(g);
+					}
 				g.drawLine(i, j, i, j);
 			}
 		}
 		long passedTime = System.currentTimeMillis() - startTime;
 		System.out.println(passedTime + " milisekunder");
 	}
+	public void pickColor(Graphics g){
+		//alltid svart om escapetime > iteration
+		
+		//ljusblå om snabb escapetime, mörkblå om det tar längre tid
+		g.setColor(new Color((int)Math.sqrt(escapeTime)*15  , 255, 255));
+		
+	}
 	
 	public static ImaginaryNumber getIm(){
 		return imNum;
-		
+	}
+	public static double getMag(){
+		return magnification;
+	}
+	public static void setMag(double d){
+		magnification=d;
 	}
 }

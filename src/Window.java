@@ -17,6 +17,8 @@ public class Window {
 	private static JButton magnificationMinus = new JButton("zoom out");
 	private static JButton constantPlus = new JButton("constant +");
 	private static JButton constantMinus = new JButton("constant -");
+	private static JButton constantIPlus = new JButton("I constant +");
+	private static JButton constantIMinus = new JButton("I constant -");
 
 	/**
 	 * Initialize the program
@@ -30,19 +32,23 @@ public class Window {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		optionsFrame.setSize(500, 500);
-		optionsFrame.setLayout( new GridLayout(2,2));
+		optionsFrame.setLayout( new GridLayout(3,2));
 		optionsFrame.add(magnificationPlus);
 		optionsFrame.add(magnificationMinus);
-
+		optionsFrame.add(constantPlus);
+		optionsFrame.add(constantMinus);
+		optionsFrame.add(constantIPlus);
+		optionsFrame.add(constantIMinus);
+		
 		ButtonListener listener = new ButtonListener();
 		constantPlus.addActionListener(listener);
 		constantMinus.addActionListener(listener);
+		constantIPlus.addActionListener(listener);
+		constantIMinus.addActionListener(listener);
 		magnificationMinus.addActionListener(listener);
 		magnificationPlus.addActionListener(listener);
-		
-		optionsFrame.add(constantPlus);
 
-		optionsFrame.add(constantMinus);
+
 		optionsFrame.setLocationRelativeTo(null);
 		optionsFrame.setVisible(true);
 
@@ -61,8 +67,28 @@ public class Window {
 			}
 			else if (e.getSource() == constantMinus){
 				ImaginaryNumber k = FractalPanel.getIm();
-				k.setC(k.getC()-0.03);
-				System.out.println("meep");
+				k.setC(k.getC()-0.01);
+				panel.repaint();
+			}
+			if (e.getSource() == constantIPlus){
+				ImaginaryNumber k = FractalPanel.getIm();
+				k.setCI(k.getCI()+0.01);
+				panel.repaint();
+			}
+			else if (e.getSource() == constantIMinus){
+				ImaginaryNumber k = FractalPanel.getIm();
+				k.setCI(k.getCI()-0.01);
+				panel.repaint();
+			}
+
+			else if (e.getSource() == magnificationMinus){
+				ImaginaryNumber k = FractalPanel.getIm();
+				FractalPanel.setMag(FractalPanel.getMag() - 100);
+				panel.repaint();
+			}
+			else if (e.getSource() == magnificationPlus){
+				ImaginaryNumber k = FractalPanel.getIm();
+				FractalPanel.setMag(FractalPanel.getMag() + 100);
 				panel.repaint();
 			}
 		}
