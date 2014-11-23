@@ -21,19 +21,27 @@ public class ImaginaryNumber {
 		return Math.sqrt( (this.getReal() * this.getReal()) + (this.getImaginary() * this.getImaginary()) );
 	}
 
+	/**
+	 * slightly faster way of getting absolute val, make sure to check escapetime^2
+	 * @return absolute val of imaginary number^2
+	 */
+	public double calcAbsoluteValNoSqrt(){
+		return (this.getReal() * this.getReal()) + (this.getImaginary() * this.getImaginary());
+	}
 
 	/**
 	 * Calculates how many iterations it takes for an imaginary number to escape the julia set
 	 * @param this what imaginary number to test
 	 * @return the amount of iterations, returns 0 if result would be over iterationCount.
 	 */
-	public int calcJuliaEscapeTime(){
+	public int getJuliaEscapeTime(){
 		int counter = 0;
 		//julia = z(n+1) = Zn^2 + C
 
 		for (int i = 0; i<iterationCount; i++){
 			
-			if (this.calcAbsoluteVal() > 2){
+			if (this.calcAbsoluteValNoSqrt() > 4 /* kanske 4?*/ ){
+			//if (this.calcAbsoluteVal() > 2 /* kanske 4?*/ ){
 				return counter;
 			}
 			this.pow2();
@@ -44,6 +52,20 @@ public class ImaginaryNumber {
 		return 0;
 	}
 	
+	public int getMandelbrotEscapeTime(){
+		int counter = 0;
+		ImaginaryNumber originalNum = new ImaginaryNumber(this.getReal(), this.getImaginary());
+		
+		for (int i = 0; i<iterationCount; i++){
+			if (this.calcAbsoluteValNoSqrt() > 4){
+				return counter;
+			}
+			this.pow2();
+			this.add(originalNum);
+			counter++;
+		}
+		return 0; //return 0 if escapetime higher than iterationcount.
+	}
 	
 	/**
 	 * raise the imaginary number to the power of 2
@@ -52,23 +74,30 @@ public class ImaginaryNumber {
 		//(komplext tal)^2 + konstant
 		double tmpReal= this.getReal();
 		double tmpIm = this.getImaginary();
-		
+
 		this.setReal( (tmpReal*tmpReal) - (tmpIm*tmpIm));
 		this.setImaginary(2*(tmpReal*tmpIm));
-
 	}
 	
 	/**
-	 * add an imaginary numer to another
+	 * add an imaginary number to another
 	 * @param oth what other imaginary number to add
 	 * @return the new imaginary number
 	 */
 	public void add(ImaginaryNumber oth){
-		ImaginaryNumber ret = new ImaginaryNumber();
-		
 		this.setImaginary(this.getImaginary() + oth.getImaginary());
 		this.setReal(this.getReal()+oth.getReal());
 	}
+	
+	/**
+	 * subtract an imaginary number with another
+	 * @param oth x - oth = new x. where x was the old imaginary number
+	 */
+	public void sub(ImaginaryNumber oth){
+		this.setImaginary(this.getImaginary() - oth.getImaginary());
+		this.setReal(this.getReal() - oth.getReal());
+	}
+		
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////// Constructons, getter & setters  ///////////////////////////////////////////////////////////

@@ -9,8 +9,8 @@ import javax.swing.JFrame;
 public class Window {
 	private static JFrame frame = new JFrame();
 	private static FractalPanel panel = new FractalPanel();
-	private static int width = 1000;
-	private static int height = 800;
+	private static int width =400;
+	private static int height = 400;
 
 	private static JFrame optionsFrame = new JFrame();
 	private static JButton magnificationPlus = new JButton("zoom in");
