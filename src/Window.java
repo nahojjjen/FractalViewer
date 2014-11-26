@@ -62,22 +62,22 @@ public class Window {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == constantPlus){
 				ImaginaryNumber k = FractalPanel.getIm();
-				k.setC(k.getC()+0.01);
+				JuliaSet.setC(JuliaSet.getC()+0.01);
 				panel.repaint();
 			}
 			else if (e.getSource() == constantMinus){
 				ImaginaryNumber k = FractalPanel.getIm();
-				k.setC(k.getC()-0.01);
+				JuliaSet.setC(JuliaSet.getC()-0.01);
 				panel.repaint();
 			}
 			if (e.getSource() == constantIPlus){
 				ImaginaryNumber k = FractalPanel.getIm();
-				k.setCI(k.getCI()+0.01);
+				JuliaSet.setCI(JuliaSet.getCI()+0.01);
 				panel.repaint();
 			}
 			else if (e.getSource() == constantIMinus){
 				ImaginaryNumber k = FractalPanel.getIm();
-				k.setCI(k.getCI()-0.01);
+				JuliaSet.setCI(JuliaSet.getCI()-0.01);
 				panel.repaint();
 			}
 

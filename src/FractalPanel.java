@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 /**
@@ -11,22 +13,31 @@ public class FractalPanel extends JPanel{
 
 	private static int width;
 	private static int height;
-	private static ImaginaryNumber imNum = new ImaginaryNumber(0.234 , 0.234);
+	private static ImaginaryNumber imNum = new ImaginaryNumber();
 	private static int escapeTime = 0; 
 	//smaller number, more zoomed  in
 	private static double magnification = 420;
+	private double xOfset = 0;
+	private double yOfset = 0;
+	private String input = "C^2 + C";
 
+
+	/**
+	 * Paint the fractal in the panel
+	 */
 	public void paintComponent (Graphics g){
+
 		long startTime = System.currentTimeMillis();
 		width  = this.getWidth();
 		height = this.getHeight();
 
+
 		for (int i = 0; i<=width;i++){
 			for (int j = 0; j<=height; j++){
 				//varje pixel ger ett värde till ett imaginärt nummer.
-				imNum = new ImaginaryNumber((double)(i-width/2)/magnification ,(double)(j-height/2)/magnification);
-				//escapeTime = imNum.getJuliaEscapeTime(); //går att ersätta med annat än julia
-				escapeTime = imNum.getMandelbrotEscapeTime();
+				imNum = new ImaginaryNumber( (double)(i-(width/2)+xOfset)/magnification ,(double)(j-(height/2)+yOfset)/magnification);
+				escapeTime = JuliaSet.getEscapeTime(imNum); //går att ersätta med annat än julia
+				//escapeTime = imNum.getMandelbrotEscapeTime();
 				pickColor(g, escapeTime);
 				colorPixel(i,j,escapeTime, g);
 			}
@@ -60,10 +71,10 @@ public class FractalPanel extends JPanel{
 			if (color > 255){
 				color = 255;
 			}
-			//boring shit//	g.setColor(new Color((int)Math.sqrt(color)*15  , 255, 255));
-			//kinda cool lightning//g.setColor(new Color(255-(int)(Math.sqrt(color)*15) , 255, 255) );
+			//g.setColor(new Color((int)Math.sqrt(color)*15  , 255, 255));
+			g.setColor(new Color(255-(int)(Math.sqrt(color)*15) , 255, 255) );
 			//g.setColor(new Color((int)(Math.sqrt(color)*15) , 0, 0) );
-			g.setColor(new Color((color) , 0, 0) );
+			//g.setColor(new Color((color) , 0, 0) );
 		}
 
 	}
@@ -91,5 +102,7 @@ public class FractalPanel extends JPanel{
 	 */
 	public static void setMag(double d){
 		magnification=d;
+		System.out.println("Magnification divider = " + magnification);
 	}
+
 }

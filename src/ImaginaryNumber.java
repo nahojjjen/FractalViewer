@@ -4,13 +4,44 @@ public class ImaginaryNumber {
 	private double real = 0;
 	private double imaginary = 0;
 
-	private static int iterationCount = 255;
-	private static double c = 0.2517; //2732
-	private static double ci = 0.3817; //2732
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////    Methods               /////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * {@inheritDoc}
+	 * Variables that are hashed are the imaginary and real part of the number.
+	 */
+	@Override
+	public int hashCode(){
+		return ((int)(this.getImaginary()*53)*100000) + (int)((this.getReal()*97)*10000);
+	}
+
+	@Override
+	/**
+	 * {@inheritDoc}
+	 * compare two imaginary numbers, returns true if the real and imaginary parts of the 
+	 * number has the same value. Example, 2+3i and 2+3i returns true, 5+2i and 6+2i returns false.
+	 */
+	public boolean equals(Object other){
+		if (this == other){
+			return true;
+		}
+		if (other == null){
+			return false;
+		}
+		if (this.getClass() != other.getClass()){
+			return false;
+		}
+		ImaginaryNumber otherIm = (ImaginaryNumber)other;
+		if (this.hashCode() == other.hashCode()){
+			return true;
+		}
+		return false;
+
+	}
+
 	/**
 	 * calculates the absolute value of an imaginary number
 	 * @param n what imaginary number to test
@@ -21,6 +52,7 @@ public class ImaginaryNumber {
 		return Math.sqrt( (this.getReal() * this.getReal()) + (this.getImaginary() * this.getImaginary()) );
 	}
 
+
 	/**
 	 * slightly faster way of getting absolute val, make sure to check escapetime^2
 	 * @return absolute val of imaginary number^2
@@ -30,80 +62,87 @@ public class ImaginaryNumber {
 	}
 
 	/**
-	 * Calculates how many iterations it takes for an imaginary number to escape the julia set
-	 * @param this what imaginary number to test
-	 * @return the amount of iterations, returns 0 if result would be over iterationCount.
-	 */
-	public int getJuliaEscapeTime(){
-		int counter = 0;
-		//julia = z(n+1) = Zn^2 + C
-
-		for (int i = 0; i<iterationCount; i++){
-			
-			if (this.calcAbsoluteValNoSqrt() > 4 /* kanske 4?*/ ){
-			//if (this.calcAbsoluteVal() > 2 /* kanske 4?*/ ){
-				return counter;
-			}
-			this.pow2();
-			this.add(new ImaginaryNumber(c,ci));
-			counter++;
-
-		}
-		return 0;
-	}
-	
-	public int getMandelbrotEscapeTime(){
-		int counter = 0;
-		ImaginaryNumber originalNum = new ImaginaryNumber(this.getReal(), this.getImaginary());
-		
-		for (int i = 0; i<iterationCount; i++){
-			if (this.calcAbsoluteValNoSqrt() > 4){
-				return counter;
-			}
-			this.pow2();
-			this.add(originalNum);
-			counter++;
-		}
-		return 0; //return 0 if escapetime higher than iterationcount.
-	}
-	
-	/**
 	 * raise the imaginary number to the power of 2
 	 */
-	public void pow2(){
-		//(komplext tal)^2 + konstant
-		double tmpReal= this.getReal();
-		double tmpIm = this.getImaginary();
+	public ImaginaryNumber pow2(){
 
-		this.setReal( (tmpReal*tmpReal) - (tmpIm*tmpIm));
-		this.setImaginary(2*(tmpReal*tmpIm));
+		ImaginaryNumber returner = new ImaginaryNumber();
+		returner.setReal( (this.getReal()*this.getReal()) - (this.getImaginary()*this.getImaginary()));
+		returner.setImaginary(2*(this.getReal()*this.getReal()));
+
+		return returner;
 	}
-	
+
+	public ImaginaryNumber pow(int powerOf){
+
+		ImaginaryNumber returner = new ImaginaryNumber();
+		for (int i = 0; i < powerOf; i++){
+			returner.setReal( (this.getReal()*this.getReal()) - (this.getImaginary()*this.getImaginary()));
+			returner.setImaginary(2*(this.getReal()*this.getReal()));
+		}
+		return returner;
+	}
+
+	//(x+yi)(u+vi) = (xu - yv) + (xv + yu)i
+	/**
+	 * Multiply this imnum with another, overrides the value of this imnum with the results.
+	 * @param n example: x.multiplyWith(n) does x*n and stores the result in x.
+	 */
+	public ImaginaryNumber multipyWith(ImaginaryNumber n){
+		ImaginaryNumber returner = new ImaginaryNumber();
+
+		returner.setReal( (this.getReal()*n.getReal() - this.getImaginary()*n.getImaginary()) );
+		returner.setImaginary( (this.getReal()*n.getImaginary() + this.getImaginary()*n.getReal()) );
+		return returner;
+	}
+
 	/**
 	 * add an imaginary number to another
 	 * @param oth what other imaginary number to add
 	 * @return the new imaginary number
 	 */
-	public void add(ImaginaryNumber oth){
-		this.setImaginary(this.getImaginary() + oth.getImaginary());
-		this.setReal(this.getReal()+oth.getReal());
+	public ImaginaryNumber add(ImaginaryNumber oth){
+		ImaginaryNumber returner = new ImaginaryNumber();
+		returner.setImaginary(this.getImaginary() + oth.getImaginary());
+		returner.setReal(this.getReal()+oth.getReal());
+		//debugg :System.out.println(this.toString() + ") + (" + oth.toString() + ") = (" + returner.toString() );
+		return returner;
 	}
-	
+
 	/**
 	 * subtract an imaginary number with another
 	 * @param oth x - oth = new x. where x was the old imaginary number
 	 */
-	public void sub(ImaginaryNumber oth){
-		this.setImaginary(this.getImaginary() - oth.getImaginary());
-		this.setReal(this.getReal() - oth.getReal());
+	public ImaginaryNumber sub(ImaginaryNumber oth){
+		ImaginaryNumber returner = new ImaginaryNumber();
+		returner.setImaginary((this.getImaginary() - oth.getImaginary()));
+		returner.setReal(this.getReal() - oth.getReal());
+		return returner;
 	}
-		
+	
+	/**
+	 *{@inheritDoc}
+	 *returns ImaginaryNumber to string in the format "of a + bi" 
+	 */
+	@Override
+	public String toString(){
+		return String.valueOf(this.getReal()) + " + "+ String.valueOf(this.getImaginary() + "i");
+	}
+	
+	//!/!/!/!/!//!!/!/! funkar ej, error out of bounds, //TODO
+	/**
+	 * Method to get imaginary number to string, but with the numbers rounded to closest 4 decimals
+	 * @return
+	 */
+	public String toShortString(){
+		return (String.valueOf(this.getReal())).substring(0, 7) + " + "+ (String.valueOf(this.getImaginary()).substring(0, 7) + "i");
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////// Constructons, getter & setters  ///////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/**
-	 * default constructor 
+	 * default constructor , creates a new imnum = 0 + 0i
 	 */
 	public ImaginaryNumber(){
 		this.real = 0;
@@ -119,17 +158,24 @@ public class ImaginaryNumber {
 		this.imaginary = i;
 	}
 
+	/**
+	 * Clone constructor, creates a new imnum with the same values as params
+	 * @param otherIm what imaginary number to clone.
+	 */
+	public ImaginaryNumber(ImaginaryNumber otherIm){
+		this.real = otherIm.getImaginary();
+		this.imaginary = otherIm.getImaginary();
+	}
+
 	public double getReal(){return this.real;}
 	public double getImaginary(){return this.imaginary;}
-	public double getC(){return this.c;}
-	public double getCI(){return this.ci;}
 
 	public void setReal(Double d){this.real = d;}
 	public void setImaginary(Double d){this.imaginary = d;}
-	public void setC(Double d){this.c = d;}
-	public void setCI(Double d){this.ci = d;}
+
 
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////  teori     //////////////////////////////////////////////////////////////////////
