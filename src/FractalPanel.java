@@ -42,12 +42,12 @@ public class FractalPanel extends JPanel {
 						(double) (y - (height / 2) + yOfset)/ magnification);
 
 				switch(mode){
-				case 0: escapeTime = MandelbrotSet.getEscapeTime(imNum); 
-				break;
+				//case 0: escapeTime = MandelbrotSet.getEscapeTime(imNum);
+				//break;
 				case 1:  escapeTime = JuliaSet.getEscapeTime(imNum);
 				break;
-				case 2:  escapeTime = GenericSet.getEscapeTime(imNum);
-				break;
+				//case 2:  escapeTime = GenericSet.getEscapeTime(imNum);
+				//break;
 				}
 
 				pickColor(g, escapeTime);

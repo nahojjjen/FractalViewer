@@ -46,8 +46,7 @@ public final class ImaginaryNumber implements Comparable<ImaginaryNumber>{
 
 	/**
 	 * calculates the absolute value of an imaginary number
-	 * 
-	 * @param n
+	 *
 	 *            what imaginary number to test
 	 * @return the absolute value of n
 	 */
@@ -132,7 +131,11 @@ public final class ImaginaryNumber implements Comparable<ImaginaryNumber>{
 
 		//C /c2 = C*
 		if (n.getReal() ==0 && n.getImaginary() == 0){
-			throw new DivideByZeroException("Even if it's imaginary, you cant divide by 0.");
+			try {
+				throw new DivideByZeroException("Even if it's imaginary, you cant divide by 0.");
+			} catch (DivideByZeroException e) {
+				e.printStackTrace();
+			}
 		}
 		ImaginaryNumber conjugate = new ImaginaryNumber(n.getReal(),-1*n.getImaginary());
 		double divideNumber = n.getReal()*n.getReal() + n.getImaginary()*n.getImaginary();
